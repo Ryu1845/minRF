@@ -65,7 +65,7 @@ class AudioMNISTMel(MelDataset):
     
     def __getitem__(self, idx):
         mel, audio, filename, mel_loss = super().__getitem__(idx)
-        label = self.label[idx]
+        label = self.labels[idx]
         return mel, label
 
 class AttrDict(dict):

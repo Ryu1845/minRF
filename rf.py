@@ -111,7 +111,7 @@ if __name__ == "__main__":
     dataloader = torch.utils.data.DataLoader(trainset, batch_size=160)
 
     model = DiT_Llama(
-            80, 32, dim=4096, n_layers=16, n_heads=16, num_classes=10
+            80, 32, dim=2048, n_layers=16, n_heads=16, num_classes=10
         ).cuda()
 
     model_size = sum(p.numel() for p in model.parameters() if p.requires_grad)

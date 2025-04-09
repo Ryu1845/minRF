@@ -163,7 +163,7 @@ if __name__ == "__main__":
             cond = torch.arange(0, 16).cuda() % 10
             uncond = torch.ones_like(cond) * 10
 
-            init_noise = torch.randn(16, channels, 100).cuda()
+            init_noise = torch.randn(16, 80, 100).cuda()
             images = rf.sample(init_noise, cond, uncond)
             # image sequences to gif
             gif = []

@@ -111,7 +111,7 @@ if __name__ == "__main__":
     dataloader = torch.utils.data.DataLoader(trainset, batch_size=16)
 
     model = DiT_Llama(
-            1, 32, dim=256, n_layers=10, n_heads=8, num_classes=10
+            80, 32, dim=256, n_layers=10, n_heads=8, num_classes=10
         ).cuda()
 
     model_size = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -128,7 +128,6 @@ if __name__ == "__main__":
         losscnt = {i: 1e-6 for i in range(10)}
         for i, (x, c) in tqdm(enumerate(dataloader)):
             x, c = x.cuda(), c.cuda()
-            x = x.unsqueeze(1)
             optimizer.zero_grad()
             loss, blsct = rf.forward(x, c)
             loss.backward()

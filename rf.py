@@ -128,6 +128,7 @@ if __name__ == "__main__":
     ckpts = sorted(list(glob))
     if ckpts:
         ckpt = ckpts[-1]
+        print(f"Loading {ckpt}")
         ckpt = torch.load(ckpt)
         state_dict = ckpt["state"]
         epoch = ckpt["epoch"]
@@ -137,6 +138,7 @@ if __name__ == "__main__":
         lossbin = {i: 0 for i in range(10)}
         losscnt = {i: 1e-6 for i in range(10)}
         torch.save(dict(state=model.state_dict(), epoch=epoch), f'checkpoint_{epoch}.pt')
+        print(f"Saving checkpoint_{epoch}.pt")
         for i, (x, c) in tqdm(enumerate(dataloader)):
             x, c = x.cuda(), c.cuda()
             optimizer.zero_grad()

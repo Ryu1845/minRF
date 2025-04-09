@@ -59,7 +59,7 @@ class AudioMNISTMel(MelDataset):
             for line in set_file:
                 path, label = line.strip().split(',')
                 training_files.append(path)
-                labels.append(label)
+                labels.append(int(label))
         super().__init__(training_files, *args, **kwargs)
         self.labels = labels
     

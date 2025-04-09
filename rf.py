@@ -136,9 +136,23 @@ if __name__ == "__main__":
         model.load_state_dict(state_dict)
 
     for epoch in range(epoch, 100):
+        rf.model.eval()
+        with torch.no_grad():
+            cond = torch.arange(0, 16).cuda() % 10
+            uncond = torch.ones_like(cond) * 10
+
+            init_noise = torch.randn(16, 80, 100).cuda()
+            images = rf.sample(init_noise, cond, uncond)
+            # image sequences to gif
+            gif = []
+            for idx, image in enumerate(images):
+                fig, ax = plt.subplots()
+                img = librosa.display.specshow(image.cpu().numpy(), ax=ax)
+                fig.colorbar(img, ax=ax)
+                fig.savefig(f'contents/sample_{epoch}_{idx}.png')
+        rf_model.train()
         lossbin = {i: 0 for i in range(10)}
         losscnt = {i: 1e-6 for i in range(10)}
-        torch.save(dict(state=model.state_dict(), epoch=epoch), f'checkpoint_{epoch}.pt')
         print(f"Saving checkpoint_{epoch}.pt")
         for i, (x, c) in tqdm(enumerate(dataloader)):
             x, c = x.cuda(), c.cuda()
@@ -159,21 +173,5 @@ if __name__ == "__main__":
         for i in range(10):
             print(f"Epoch: {epoch}, {i} range loss: {lossbin[i] / losscnt[i]}")
 
-        #wandb.log({f"lossbin_{i}": lossbin[i] / losscnt[i] for i in range(10)})
-
-        rf.model.eval()
-        with torch.no_grad():
-            cond = torch.arange(0, 16).cuda() % 10
-            uncond = torch.ones_like(cond) * 10
-
-            init_noise = torch.randn(16, 80, 100).cuda()
-            images = rf.sample(init_noise, cond, uncond)
-            # image sequences to gif
-            gif = []
-            for idx, image in enumerate(images):
-                fig, ax = plt.subplots()
-                img = librosa.display.specshow(image, ax=ax)
-                fig.colorbar(img, ax=ax)
-                fig.savefig(f'contents/sample_{epoch}_{idx}.png')
-
-        rf.model.train()
+        #wandb.log({f"lossbin_{i}": lossbin[i] / losscnt[i] for i in range(10)}
+        torch.save(dict(state=model.state_dict(), epoch=epoch), f'checkpoint_{epoch}.pt')

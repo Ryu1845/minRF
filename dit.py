@@ -257,7 +257,7 @@ class DiT_Llama(nn.Module):
             nn.GroupNorm(32, dim // 2),
         )
 
-        self.x_embedder = nn.Linear(patch_size * patch_size * dim // 2, dim, bias=True)
+        self.x_embedder = nn.Linear(patch_size * dim // 2, dim, bias=True)
         nn.init.constant_(self.x_embedder.bias, 0)
 
         self.t_embedder = TimestepEmbedder(min(dim, 1024))

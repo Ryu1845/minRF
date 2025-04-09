@@ -128,6 +128,7 @@ if __name__ == "__main__":
         losscnt = {i: 1e-6 for i in range(10)}
         for i, (x, c) in tqdm(enumerate(dataloader)):
             x, c = x.cuda(), c.cuda()
+            x = x.unsqueeze(1)
             optimizer.zero_grad()
             loss, blsct = rf.forward(x, c)
             loss.backward()

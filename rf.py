@@ -52,12 +52,26 @@ class RF:
 
 
 class AudioMNISTMel(MelDataset):
-    def __init__(self, root_dir: str):
-        root_dir = Path(root_dir)
-        files = 
-        for dir in root_dir.iterdir():
-            label = int(dir.name)
+    def __init__(self, set_file: str):
+        with open(set_file) as set_file:
+            training_files = []
+            labels = []
+            for line in set_file:
+                path, label = line.strip().split(',')
+                training_files.append(path)
+                labels.append(label)
+        super().__init__(training_files)
+        self.labels = labels
+    
+    def __getitem__(self, idx):
+        mel, audio, filename, mel_loss = super().__getitem__(idx)
+        label = self.label[idx]
+        return mel, label
 
+class AttrDict(dict):
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
 
 
 if __name__ == "__main__":
@@ -68,6 +82,30 @@ if __name__ == "__main__":
 
     import wandb
     from dit import DiT_Llama
+    import json
+
+    with open('BigVGAN/configs/bigvgan_22khz_80band.json') as config_f:
+        config=json.load(config_f)
+    h = AttrDict(config)
+    trainset = AudioMNISTMel(
+        training_filelist,
+        h,
+        h.segment_size,
+        h.n_fft,
+        h.num_mels,
+        h.hop_size,
+        h.win_size,
+        h.sampling_rate,
+        h.fmin,
+        h.fmax,
+        shuffle=False if h.num_gpus > 1 else True,
+        fmax_loss=h.fmax_for_loss,
+        device=device,
+        fine_tuning=a.fine_tuning,
+        base_mels_path=a.input_mels_dir,
+        is_seen=True,
+        split=False,
+    )
 
     model = DiT_Llama(
             channels, 32, dim=256, n_layers=10, n_heads=8, num_classes=10

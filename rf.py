@@ -123,10 +123,19 @@ if __name__ == "__main__":
     criterion = torch.nn.MSELoss()
 
     #wandb.init(project=f"rf_{dataset_name}")
+    epoch = 0
+    if (glob:=Path('./').glob('*.pt')):
+        ckpts = sorted(list(glob))
+        ckpt = ckpts[-1]
+        ckpt = torch.load(ckpt)
+        state_dict = ckpt["state"]
+        epoch = ckpt["epoch"]
+        model.load_state_dict(state_dict)
 
-    for epoch in range(100):
+    for epoch in range(epoch, 100):
         lossbin = {i: 0 for i in range(10)}
         losscnt = {i: 1e-6 for i in range(10)}
+        torch.save(dict(state=model.state_dict(), epoch=epoch), f'checkpoint_{epoch}.pt')
         for i, (x, c) in tqdm(enumerate(dataloader)):
             x, c = x.cuda(), c.cuda()
             optimizer.zero_grad()

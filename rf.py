@@ -104,7 +104,7 @@ if __name__ == "__main__":
         h.fmax,
         shuffle=False if h.num_gpus > 1 else True,
         fmax_loss=h.fmax_for_loss,
-        device=device,
+        device=torch.device("cuda"),
         fine_tuning=a.fine_tuning,
         base_mels_path=a.input_mels_dir,
         is_seen=True,

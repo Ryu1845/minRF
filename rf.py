@@ -121,7 +121,7 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=5e-4)
     criterion = torch.nn.MSELoss()
 
-    wandb.init(project=f"rf_{dataset_name}")
+    #wandb.init(project=f"rf_{dataset_name}")
 
     for epoch in range(100):
         lossbin = {i: 0 for i in range(10)}
@@ -133,7 +133,8 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
 
-            wandb.log({"loss": loss.item()})
+            #wandb.log({"loss": loss.item()})
+            print(loss.item())
 
             # count based on t
             for t, l in blsct:
@@ -144,7 +145,7 @@ if __name__ == "__main__":
         for i in range(10):
             print(f"Epoch: {epoch}, {i} range loss: {lossbin[i] / losscnt[i]}")
 
-        wandb.log({f"lossbin_{i}": lossbin[i] / losscnt[i] for i in range(10)})
+        #wandb.log({f"lossbin_{i}": lossbin[i] / losscnt[i] for i in range(10)})
 
         """
         rf.model.eval()

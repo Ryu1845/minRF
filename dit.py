@@ -290,16 +290,14 @@ class DiT_Llama(nn.Module):
         return imgs
 
     def patchify(self, x):
-        B, C, H, W = x.size()
+        B, C, L = x.size()
         x = x.view(
             B,
             C,
-            H // self.patch_size,
-            self.patch_size,
-            W // self.patch_size,
+            L // self.patch_size,
             self.patch_size,
         )
-        x = x.permute(0, 2, 4, 1, 3, 5).flatten(-3).flatten(1, 2)
+        x = x.permute(0, 2, 1, 3).flatten(-2)
         return x
 
     def forward(self, x, t, y):

@@ -147,7 +147,7 @@ if __name__ == "__main__":
             gif = []
             for idx, image in enumerate(images):
                 fig, ax = plt.subplots()
-                img = librosa.display.specshow(image.cpu().numpy(), ax=ax)
+                img = librosa.display.specshow(image[0].cpu().numpy(), ax=ax)
                 fig.colorbar(img, ax=ax)
                 fig.savefig(f'contents/sample_{epoch}_{idx}.png')
         rf_model.train()

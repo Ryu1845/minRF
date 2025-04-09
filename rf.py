@@ -1,7 +1,13 @@
 # implementation of Rectified Flow for simple minded people like me.
 import argparse
+from pathlib import Path
+import sys
+sys.path.append("./BigVGAN")
 
 import torch
+from torch.utils.data import Dataset
+
+from meldataset import MelDataset
 
 
 class RF:
@@ -45,53 +51,26 @@ class RF:
         return images
 
 
+class AudioMNISTMel(MelDataset):
+    def __init__(self, root_dir: str):
+        root_dir = Path(root_dir)
+        files = 
+        for dir in root_dir.iterdir():
+            label = int(dir.name)
+
+
+
 if __name__ == "__main__":
     # train class conditional RF on mnist.
     import numpy as np
     import torch.optim as optim
-    from PIL import Image
-    from torch.utils.data import DataLoader
-    from torchvision import datasets, transforms
-    from torchvision.utils import make_grid
     from tqdm import tqdm
 
     import wandb
     from dit import DiT_Llama
 
-    parser = argparse.ArgumentParser(description="use cifar?")
-    parser.add_argument("--cifar", action="store_true")
-    args = parser.parse_args()
-    CIFAR = args.cifar
-
-    if CIFAR:
-        dataset_name = "cifar"
-        fdatasets = datasets.CIFAR10
-        transform = transforms.Compose(
-            [
-                transforms.ToTensor(),
-                transforms.RandomCrop(32),
-                transforms.RandomHorizontalFlip(),
-                transforms.Normalize((0.5,), (0.5,)),
-            ]
-        )
-        channels = 3
-        model = DiT_Llama(
+    model = DiT_Llama(
             channels, 32, dim=256, n_layers=10, n_heads=8, num_classes=10
-        ).cuda()
-
-    else:
-        dataset_name = "mnist"
-        fdatasets = datasets.MNIST
-        transform = transforms.Compose(
-            [
-                transforms.ToTensor(),
-                transforms.Pad(2),
-                transforms.Normalize((0.5,), (0.5,)),
-            ]
-        )
-        channels = 1
-        model = DiT_Llama(
-            channels, 32, dim=64, n_layers=6, n_heads=4, num_classes=10
         ).cuda()
 
     model_size = sum(p.numel() for p in model.parameters() if p.requires_grad)

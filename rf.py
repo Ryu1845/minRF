@@ -87,6 +87,10 @@ if __name__ == "__main__":
     with open('BigVGAN/configs/bigvgan_22khz_80band.json') as config_f:
         config=json.load(config_f)
     h = AttrDict(config)
+
+    training_filelist = "train.csv"
+    val_filelist = "val.csv"
+    test_filelist = "test.csv"
     trainset = AudioMNISTMel(
         training_filelist,
         h,
@@ -106,9 +110,10 @@ if __name__ == "__main__":
         is_seen=True,
         split=False,
     )
+    dataloader = torch.utils.data.DataLoader(trainset, batch_size=16)
 
     model = DiT_Llama(
-            channels, 32, dim=256, n_layers=10, n_heads=8, num_classes=10
+            1, 32, dim=256, n_layers=10, n_heads=8, num_classes=10
         ).cuda()
 
     model_size = sum(p.numel() for p in model.parameters() if p.requires_grad)

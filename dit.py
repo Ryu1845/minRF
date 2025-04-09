@@ -249,10 +249,10 @@ class DiT_Llama(nn.Module):
         self.patch_size = patch_size
 
         self.init_conv_seq = nn.Sequential(
-            nn.Conv2d(in_channels, dim // 2, kernel_size=5, padding=2, stride=1),
+            nn.Conv1d(in_channels, dim // 2, kernel_size=5, padding=2, stride=1),
             nn.SiLU(),
             nn.GroupNorm(32, dim // 2),
-            nn.Conv2d(dim // 2, dim // 2, kernel_size=5, padding=2, stride=1),
+            nn.Conv1d(dim // 2, dim // 2, kernel_size=5, padding=2, stride=1),
             nn.SiLU(),
             nn.GroupNorm(32, dim // 2),
         )

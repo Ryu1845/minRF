@@ -146,6 +146,7 @@ if __name__ == "__main__":
 
         wandb.log({f"lossbin_{i}": lossbin[i] / losscnt[i] for i in range(10)})
 
+        """
         rf.model.eval()
         with torch.no_grad():
             cond = torch.arange(0, 16).cuda() % 10
@@ -176,3 +177,4 @@ if __name__ == "__main__":
             last_img.save(f"contents/sample_{epoch}_last.png")
 
         rf.model.train()
+        """

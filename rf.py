@@ -150,6 +150,7 @@ if __name__ == "__main__":
                 img = librosa.display.specshow(image[0].cpu().numpy(), ax=ax)
                 fig.colorbar(img, ax=ax)
                 fig.savefig(f'contents/sample_{epoch}_{idx}.png')
+                plt.close()
         rf.model.train()
         lossbin = {i: 0 for i in range(10)}
         losscnt = {i: 1e-6 for i in range(10)}

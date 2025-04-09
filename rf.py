@@ -69,7 +69,7 @@ class AudioMNISTMel(MelDataset):
         mel, audio, filename, mel_loss = super().__getitem__(idx)
         mel = torch.nn.functional.pad(mel, (0, 100-mel.shape[1]))
         label = self.labels[idx]
-        return torch.tensor(mel), torch.tensor(label)
+        return mel, torch.tensor(label)
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):

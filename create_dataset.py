@@ -27,3 +27,7 @@ def main():
             set[i].append(samples[global_cnt])
             global_cnt+=1
     train, test, val = set
+
+
+if __name__=='__main__':
+    main()

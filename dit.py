@@ -284,7 +284,7 @@ class DiT_Llama(nn.Module):
         c = self.out_channels
         p = self.patch_size
         l = int(x.shape[1])
-        x = x.reshape(shape=(x.shape[0], t, l)).mT
+        x = x.reshape(shape=(x.shape[0], t, c)).mT
         imgs = x.reshape(shape=(x.shape[0], c, t))
         return imgs
 

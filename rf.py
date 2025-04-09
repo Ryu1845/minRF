@@ -109,7 +109,7 @@ if __name__ == "__main__":
         is_seen=True,
         split=False,
     )
-    dataloader = torch.utils.data.DataLoader(trainset, batch_size=160)
+    dataloader = torch.utils.data.DataLoader(trainset, batch_size=160, num_workers=8)
 
     model = DiT_Llama(
             80, 32, dim=2048, n_layers=16, n_heads=16, num_classes=10

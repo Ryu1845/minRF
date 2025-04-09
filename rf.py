@@ -121,9 +121,6 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=5e-4)
     criterion = torch.nn.MSELoss()
 
-    mnist = fdatasets(root="./data", train=True, download=True, transform=transform)
-    dataloader = DataLoader(mnist, batch_size=256, shuffle=True, drop_last=True)
-
     wandb.init(project=f"rf_{dataset_name}")
 
     for epoch in range(100):

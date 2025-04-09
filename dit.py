@@ -283,10 +283,9 @@ class DiT_Llama(nn.Module):
     def unpatchify(self, x):
         c = self.out_channels
         p = self.patch_size
-        h = w = int(x.shape[1] ** 0.5)
-        x = x.reshape(shape=(x.shape[0], h, w, p, p, c))
-        x = torch.einsum("nhwpqc->nchpwq", x)
-        imgs = x.reshape(shape=(x.shape[0], c, h * p, h * p))
+        l = int(x.shape[1])
+        x = x.reshape(shape=(x.shape[0], t, l)).mT
+        imgs = x.reshape(shape=(x.shape[0], c, t))
         return imgs
 
     def patchify(self, x):

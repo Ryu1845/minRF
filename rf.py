@@ -124,8 +124,9 @@ if __name__ == "__main__":
 
     #wandb.init(project=f"rf_{dataset_name}")
     epoch = 0
-    if (glob:=Path('./').glob('*.pt')):
-        ckpts = sorted(list(glob))
+    glob=Path('./').glob('*.pt')
+    ckpts = sorted(list(glob))
+    if ckpts:
         ckpt = ckpts[-1]
         ckpt = torch.load(ckpt)
         state_dict = ckpt["state"]

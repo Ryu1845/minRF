@@ -150,10 +150,9 @@ if __name__ == "__main__":
                 img = librosa.display.specshow(image[0].cpu().numpy(), ax=ax)
                 fig.colorbar(img, ax=ax)
                 fig.savefig(f'contents/sample_{epoch}_{idx}.png')
-        rf_model.train()
+        rf.model.train()
         lossbin = {i: 0 for i in range(10)}
         losscnt = {i: 1e-6 for i in range(10)}
-        print(f"Saving checkpoint_{epoch}.pt")
         for i, (x, c) in tqdm(enumerate(dataloader)):
             x, c = x.cuda(), c.cuda()
             optimizer.zero_grad()
@@ -174,4 +173,5 @@ if __name__ == "__main__":
             print(f"Epoch: {epoch}, {i} range loss: {lossbin[i] / losscnt[i]}")
 
         #wandb.log({f"lossbin_{i}": lossbin[i] / losscnt[i] for i in range(10)}
+        print(f"Saving checkpoint_{epoch}.pt")
         torch.save(dict(state=model.state_dict(), epoch=epoch), f'checkpoint_{epoch}.pt')

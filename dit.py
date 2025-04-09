@@ -209,7 +209,7 @@ class FinalLayer(nn.Module):
         super().__init__()
         self.norm_final = nn.LayerNorm(hidden_size, elementwise_affine=False, eps=1e-6)
         self.linear = nn.Linear(
-            hidden_size, patch_size * patch_size * out_channels, bias=True
+            hidden_size, patch_size * out_channels, bias=True
         )
         self.adaLN_modulation = nn.Sequential(
             nn.SiLU(),
@@ -284,8 +284,8 @@ class DiT_Llama(nn.Module):
         c = self.out_channels
         p = self.patch_size
         l = int(x.shape[1])
-        x = x.reshape(shape=(x.shape[0], t, c)).mT
-        imgs = x.reshape(shape=(x.shape[0], c, t))
+        x = x.reshape(shape=(x.shape[0], l, c, p)).mT.reshape(x.shape[0], l*p, c).mT
+        imgs = x
         return imgs
 
     def patchify(self, x):

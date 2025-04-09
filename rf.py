@@ -65,6 +65,7 @@ class AudioMNISTMel(MelDataset):
     
     def __getitem__(self, idx):
         mel, audio, filename, mel_loss = super().__getitem__(idx)
+        mel = torch.nn.functional.pad(mel, (0, 100-mel.shape[1]))
         label = self.labels[idx]
         return mel, label
 
@@ -72,7 +73,6 @@ class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
-
 
 if __name__ == "__main__":
     # train class conditional RF on mnist.

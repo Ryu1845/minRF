@@ -52,7 +52,7 @@ class RF:
 
 
 class AudioMNISTMel(MelDataset):
-    def __init__(self, set_file: str):
+    def __init__(self, set_file: str, **kwargs):
         with open(set_file) as set_file:
             training_files = []
             labels = []
@@ -60,7 +60,7 @@ class AudioMNISTMel(MelDataset):
                 path, label = line.strip().split(',')
                 training_files.append(path)
                 labels.append(label)
-        super().__init__(training_files)
+        super().__init__(training_files, **kwargs)
         self.labels = labels
     
     def __getitem__(self, idx):
